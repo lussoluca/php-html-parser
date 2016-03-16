@@ -370,6 +370,49 @@ class NodeHtmlTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('foo', $node->getAttribute('class'));
 	}
 
+	public function testRemoveAttribute()
+	{
+		$node = new HtmlNode('a');
+		$node->getTag()->setAttributes([
+			'href' => [
+				'value'       => 'http://google.com',
+				'doublequote' => false,
+			],
+			'class' => [
+				'value'       => 'test-class',
+			],
+		]);
+
+		$node->removeAttribute('class');
+		$this->assertNull($node->getAttribute('class'));
+	}
+
+	public function testRemoveAttributes()
+	{
+		$node = new HtmlNode('a');
+		$node->getTag()->setAttributes([
+			'href' => [
+				'value'       => 'http://google.com',
+				'doublequote' => false,
+			],
+			'class' => [
+				'value'       => 'test-class',
+			],
+			'target' => [
+				'value'       => '_blank',
+			],
+			'rel' => [
+				'value'		  => 'nofollow',
+			],
+		]);
+
+		$node->removeAttributes(['class', 'rel']);
+		$this->assertEquals('test-class', $node->getAttribute('class'));
+		$this->assertEquals('nofollow', $node->getAttribute('rel'));
+		$this->assertNull($node->getAttribute('href'));
+		$this->assertNull($node->getAttribute('target'));
+	}
+
 	public function testCountable()
 	{
 		$div = new Tag('div');

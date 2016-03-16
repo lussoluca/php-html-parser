@@ -25,6 +25,51 @@ class NodeTagTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('http://google.com', $tag->getAttribute('href')['value']);
 	}
 
+	public function testRemoveAttribute()
+	{
+		$attr = [
+			'href' => [
+				'value'       => 'http://google.com',
+				'doublequote' => false,
+			],
+			'class' => [
+				'value'       => 'test-class',
+			],
+		];
+
+		$tag = new Tag('a');
+		$tag->setAttributes($attr);
+		$tag->removeAttribute('class');
+		$this->assertNull($tag->getAttribute('class'));
+	}
+
+	public function testRemoveAttributes()
+	{
+		$attr = [
+			'href' => [
+				'value'       => 'http://google.com',
+				'doublequote' => false,
+			],
+			'class' => [
+				'value'       => 'test-class',
+			],
+			'target' => [
+				'value'       => '_blank',
+			],
+			'rel' => [
+				'value'		  => 'nofollow',
+			],
+		];
+
+		$tag = new Tag('a');
+		$tag->setAttributes($attr);
+		$tag->removeAttributes(['class', 'rel']);
+		$this->assertEquals('test-class', $tag->getAttribute('class')['value']);
+		$this->assertEquals('nofollow', $tag->getAttribute('rel')['value']);
+		$this->assertNull($tag->getAttribute('href'));
+		$this->assertNull($tag->getAttribute('target'));
+	}
+
 	public function testSetAttributeNoArray()
 	{
 		$tag = new Tag('a');
